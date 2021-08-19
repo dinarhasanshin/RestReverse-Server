@@ -14,7 +14,7 @@ const router = Router()
 router.post(
     '/client/register',
     [
-        check('email', 'Invalid email').isEmail(),
+        check('numberPhone', 'Invalid phone').isMobilePhone(),
         check('password', 'Invalid password')
             .isLength({min: 6})
     ],
@@ -29,7 +29,7 @@ router.post(
             })
         }
 
-        const {email, password} = req.body
+        const {numberPhone, password, firstName, lastName} = req.body
 
         const candidate = await Client.findOne({ email })
 
@@ -38,7 +38,7 @@ router.post(
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
-        const client = new Client({ email, password: hashedPassword })
+        const client = new Client({ email, password: hashedPassword, firstName, lastName })
 
         await client.save()
 
